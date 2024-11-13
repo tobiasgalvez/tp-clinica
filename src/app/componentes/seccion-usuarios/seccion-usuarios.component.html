@@ -1,0 +1,55 @@
+<div class="seccion-usuarios-container">
+    <h2>Gestión de Usuarios</h2>
+  
+    <button (click)="mostrarFormularioNuevoUsuario()" class="boton-nuevo-usuario">Registrar Nuevo Administrador</button>
+  
+    <div *ngIf="mostrarFormulario" class="formulario-container">
+      <h3>Registrar Nuevo Administrador</h3>
+      <form [formGroup]="usuarioForm" (ngSubmit)="registrarUsuario()">
+        <input formControlName="nombre" placeholder="Nombre" required />
+        <input formControlName="apellido" placeholder="Apellido" required />
+        <input type="number" formControlName="edad" placeholder="Edad" required />
+        <input formControlName="dni" placeholder="DNI" required />
+        <input formControlName="mail" type="email" placeholder="Email" required />
+        <input formControlName="contrasena" type="password" placeholder="Contraseña" required />
+        <input type="file" (change)="onFileChange($event, 'imagenPerfil')" />
+        <button type="submit">Registrar Usuario</button>
+      </form>
+    </div>
+  
+    <div *ngIf="usuarios.length > 0" class="usuarios-lista">
+      <h3>Listado de Usuarios</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>
+              <img *ngIf="usuario.imagenPerfil" [src]="usuario.imagenPerfil" alt="Imagen de perfil" width="50" height="50" />
+            </td>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.apellido }}</td>
+            <td>{{ usuario.edad }}</td>
+            <td>{{ usuario.dni }}</td>
+            <td>{{ usuario.mail }}</td>
+            <td>{{ usuario.tipo }}</td>
+            <td *ngIf="usuario.tipo === 'Especialista'">
+              <button (click)="cambiarEstadoEspecialista(usuario.id, usuario.aprobado)">
+                {{ usuario.aprobado ? 'Inhabilitar' : 'Habilitar' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

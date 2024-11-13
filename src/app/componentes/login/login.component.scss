@@ -1,0 +1,83 @@
+.login-container {
+    max-width: 400px;
+    margin: auto;
+    background-color: #e0f7fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  h2 {
+    color: #00695c;
+  }
+  
+  button {
+    margin: 10px;
+    padding: 10px;
+    background-color: #00695c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"] {
+    background-color: #00796b;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #004d40;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+
+
+  .fav-buttons-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .fav-button {
+    display: flex;
+    align-items: center;
+    background-color: #00796b;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  .fav-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .fav-button img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .fav-button span {
+    display: none;
+  }
+  
+  .fav-button:hover span {
+    display: inline;
+    margin-left: 10px;
+  } 
+  

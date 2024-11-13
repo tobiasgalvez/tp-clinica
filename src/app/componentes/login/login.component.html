@@ -1,0 +1,16 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <input formControlName="mail" type="email" placeholder="Email" required />
+    <input formControlName="contrasena" type="password" placeholder="Contraseña" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <!-- Botones de acceso rápido -->
+  <div class="fav-buttons-container">
+    <button *ngFor="let usuario of usuariosAccesoRapido" class="fav-button" (click)="loginConAccesoRapido(usuario)">
+      <img *ngIf="usuario.imagenPerfil" [src]="usuario.imagenPerfil" alt="{{ usuario.nombre }}" />
+      <span>{{ usuario.nombre }}</span>
+    </button>
+  </div>
+</div>

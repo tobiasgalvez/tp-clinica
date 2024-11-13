@@ -1,0 +1,53 @@
+.seccion-usuarios-container {
+    padding: 20px;
+  }
+  
+  .boton-nuevo-usuario {
+    background-color: #00796b;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .formulario-container {
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .usuarios-lista table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .usuarios-lista th, .usuarios-lista td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .usuarios-lista th {
+    background-color: #00796b;
+    color: white;
+  }
+  
+  button {
+    background-color: #00796b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #004d40;
+  }
+  
+  img {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
