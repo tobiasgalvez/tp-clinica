@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Firestore, setDoc, doc } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Auth, getAuth, createUserWithEmailAndPassword, sendEmailVerification } from '@angular/fire/auth';
-import { Storage, getStorage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { Auth, createUserWithEmailAndPassword, sendEmailVerification } from '@angular/fire/auth';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Router } from '@angular/router';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxCaptchaModule],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   animations: [
     trigger('formAnimation', [
       transition(':enter', [
@@ -25,14 +27,22 @@ import { Router } from '@angular/router';
     ])
   ]
 })
-export class RegistroComponent {
+export class RegistroComponent implements OnInit {
   registroForm: FormGroup;
   tipoUsuario: 'Paciente' | 'Especialista' | null = null;
   especialidades: string[] = ['Cardiología', 'Pediatría', 'Neurología'];
   errorMessage: string = '';
   mostrarNuevaEspecialidad: boolean = false;
+  siteKey: string = '6LeZj30qAAAAAB-KhPqsQ9-bHu-DJxyPTHYoiu8g'; // Coloca aquí tu Site Key de Google reCAPTCHA v2
+  recaptchaResponse: string | null = null;
 
-  constructor(private fb: FormBuilder, private firestore: Firestore, private auth: Auth, private storage: Storage, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private firestore: Firestore,
+    private auth: Auth,
+    private storage: Storage,
+    private router: Router
+  ) {
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -43,9 +53,11 @@ export class RegistroComponent {
       obraSocial: [''], // Solo para pacientes
       especialidad: ['', this.tipoUsuario === 'Especialista' ? Validators.required : []], // Solo para especialistas
       imagenes: [null, this.tipoUsuario === 'Paciente' ? Validators.required : []],
-      imagenPerfil: [null, this.tipoUsuario === 'Especialista' ? Validators.required : []] // Solo para especialistas
+      imagenPerfil: [null, this.tipoUsuario === 'Especialista' ? Validators.required : []],
     });
   }
+
+  ngOnInit(): void {}
 
   onFileChange(event: Event, controlName: string) {
     const input = event.target as HTMLInputElement;
@@ -54,10 +66,13 @@ export class RegistroComponent {
     }
   }
 
-  async registrar() {
-    if (this.registroForm.valid) {
-      const datos = this.registroForm.value;
+  handleCaptchaResponse(response: any) {
+    this.recaptchaResponse = response;
+  }
 
+  async registrar() {
+    if (this.registroForm.valid && this.recaptchaResponse) {
+      const datos = this.registroForm.value;
       try {
         const userCredential = await createUserWithEmailAndPassword(this.auth, datos.mail, datos.contrasena);
         await sendEmailVerification(userCredential.user);
@@ -78,7 +93,7 @@ export class RegistroComponent {
         // Subir imagen de perfil si es un especialista
         let imagenPerfilUrl = '';
         if (this.tipoUsuario === 'Especialista' && datos.imagenPerfil && datos.imagenPerfil.length > 0) {
-          const file = datos.imagenPerfil[0]; // Tomar el primer archivo del FileList
+          const file = datos.imagenPerfil[0];
           const filePath = `especialistas/${userCredential.user.uid}/imagenPerfil/${file.name}`;
           const storageRef = ref(this.storage, filePath);
           await uploadBytes(storageRef, file);
@@ -88,11 +103,11 @@ export class RegistroComponent {
         // Crear datos para guardar en Firestore
         const dataToSave = {
           ...datos,
-          imagenes: fileUrls.length > 0 ? fileUrls : null, // Guardar las URLs en lugar del FileList
-          imagenPerfil: imagenPerfilUrl || null // Guardar la URL de la imagen de perfil si existe
+          imagenes: fileUrls.length > 0 ? fileUrls : null,
+          imagenPerfil: imagenPerfilUrl || null
         };
 
-        // Usar setDoc para asegurarse de que el UID sea el mismo que el del usuario autenticado
+        // Guardar datos en la colección adecuada
         if (this.tipoUsuario === 'Paciente') {
           await setDoc(doc(this.firestore, 'pacientes', userCredential.user.uid), dataToSave);
           this.errorMessage = 'Paciente registrado con éxito. Por favor verifique su correo electrónico.';
@@ -107,7 +122,7 @@ export class RegistroComponent {
         this.errorMessage = 'Hubo un error al registrar, por favor intente nuevamente';
       }
     } else {
-      this.errorMessage = 'Por favor complete todos los campos correctamente';
+      this.errorMessage = 'Por favor complete todos los campos correctamente y valide el reCAPTCHA.';
     }
   }
 

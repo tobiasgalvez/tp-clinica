@@ -70,6 +70,11 @@
       <input type="file" (change)="onFileChange($event, 'imagenPerfil')" required/>
     </div>
 
+    <!-- reCAPTCHA v2 -->
+    <div class="recaptcha-container">
+      <re-captcha [siteKey]="siteKey" (resolved)="handleCaptchaResponse($event)"></re-captcha>
+    </div>
+
     <button type="submit">Registrar</button>
   </form>
 
