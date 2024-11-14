@@ -4,83 +4,95 @@
 
 <div *ngIf="!isLoading">
   <div class="registro-container" *ngIf="!tipoUsuario">
-    <button (click)="tipoUsuario = 'Paciente'" class="registro-boton">
+    <button (click)="seleccionarTipoUsuario('Paciente')" class="registro-boton">
       <div class="registro-imagen registro-paciente"></div>
       <span class="registro-texto">Registrar Paciente</span>
     </button>
-    <button (click)="tipoUsuario = 'Especialista'" class="registro-boton">
+    <button (click)="seleccionarTipoUsuario('Especialista')" class="registro-boton">
       <div class="registro-imagen registro-especialista"></div>
       <span class="registro-texto">Registrar Especialista</span>
     </button>
   </div>
-<div class="registro-form" *ngIf="tipoUsuario" [@formAnimation]>
-  <h2>Registro de {{ tipoUsuario }}</h2>
-  <form [formGroup]="registroForm" (ngSubmit)="registrar()">
-    <!-- Nombre -->
-    <input formControlName="nombre" placeholder="Nombre" required (blur)="registroForm.get('nombre')?.markAsTouched()"/>
-    <div class="error" *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid">
-      <small>El nombre es requerido</small>
-    </div>
 
-    <!-- Apellido -->
-    <input formControlName="apellido" placeholder="Apellido" required (blur)="registroForm.get('apellido')?.markAsTouched()"/>
-    <div class="error" *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid">
-      <small>El apellido es requerido</small>
-    </div>
-
-    <!-- Edad -->
-    <input type="number" formControlName="edad" placeholder="Edad" required (blur)="registroForm.get('edad')?.markAsTouched()"/>
-    <div class="error" *ngIf="registroForm.get('edad')?.touched && registroForm.get('edad')?.invalid">
-      <small>La edad debe ser entre 1 y 120 años</small>
-    </div>
-
-    <!-- DNI -->
-    <input formControlName="dni" placeholder="DNI" required (blur)="registroForm.get('dni')?.markAsTouched()"/>
-    <div class="error" *ngIf="registroForm.get('dni')?.touched && registroForm.get('dni')?.invalid">
-      <small>El DNI debe ser un número válido de 7 u 8 dígitos</small>
-    </div>
-
-    <!-- Email -->
-    <input formControlName="mail" type="email" placeholder="Email" required (blur)="registroForm.get('mail')?.markAsTouched()"/>
-    <div class="error" *ngIf="registroForm.get('mail')?.touched && registroForm.get('mail')?.invalid">
-      <small>Debe ingresar un email válido</small>
-    </div>
-
-    <!-- Contraseña -->
-    <input formControlName="contrasena" type="password" placeholder="Contraseña" required (blur)="registroForm.get('contrasena')?.markAsTouched()"/>
-    <div class="error" *ngIf="registroForm.get('contrasena')?.touched && registroForm.get('contrasena')?.invalid">
-      <small>La contraseña debe tener al menos 6 caracteres</small>
-    </div>
-
-    <!-- Campos adicionales para Paciente -->
-    <div *ngIf="tipoUsuario === 'Paciente'">
-      <input formControlName="obraSocial" placeholder="Obra Social"/>
-      <input type="file" (change)="onFileChange($event, 'imagenes')" multiple required/>
-    </div>
-
-    <!-- Campos adicionales para Especialista -->
-    <div *ngIf="tipoUsuario === 'Especialista'">
-      <select formControlName="especialidad">
-        <option *ngFor="let esp of especialidades" [value]="esp">{{ esp }}</option>
-      </select>
-
-      <button type="button" (click)="mostrarNuevaEspecialidad = true">Agregar Nueva Especialidad</button>
-
-      <div *ngIf="mostrarNuevaEspecialidad">
-        <input type="text" #nuevaEspecialidadInput placeholder="Nueva Especialidad"/>
-        <button type="button" (click)="agregarEspecialidad(nuevaEspecialidadInput.value); mostrarNuevaEspecialidad = false">Guardar Especialidad</button>
+  <div class="registro-form" *ngIf="tipoUsuario" [@formAnimation]>
+    <h2>Registro de {{ tipoUsuario }}</h2>
+    <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+      <!-- Nombre -->
+      <input formControlName="nombre" placeholder="Nombre" required (blur)="registroForm.get('nombre')?.markAsTouched()"/>
+      <div class="error" *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid">
+        <small>El nombre es requerido</small>
       </div>
 
-      <input type="file" (change)="onFileChange($event, 'imagenPerfil')" required/>
-    </div>
+      <!-- Apellido -->
+      <input formControlName="apellido" placeholder="Apellido" required (blur)="registroForm.get('apellido')?.markAsTouched()"/>
+      <div class="error" *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid">
+        <small>El apellido es requerido</small>
+      </div>
 
-    <!-- reCAPTCHA v2 -->
-    <div class="recaptcha-container">
-      <re-captcha [siteKey]="siteKey" (resolved)="handleCaptchaResponse($event)"></re-captcha>
-    </div>
+      <!-- Edad -->
+      <input type="number" formControlName="edad" placeholder="Edad" required (blur)="registroForm.get('edad')?.markAsTouched()"/>
+      <div class="error" *ngIf="registroForm.get('edad')?.touched && registroForm.get('edad')?.invalid">
+        <small>La edad debe ser entre 1 y 120 años</small>
+      </div>
 
-    <button type="submit">Registrar</button>
-  </form>
+      <!-- DNI -->
+      <input formControlName="dni" placeholder="DNI" required (blur)="registroForm.get('dni')?.markAsTouched()"/>
+      <div class="error" *ngIf="registroForm.get('dni')?.touched && registroForm.get('dni')?.invalid">
+        <small>El DNI debe ser un número válido de 7 u 8 dígitos</small>
+      </div>
 
-  <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <!-- Email -->
+      <input formControlName="mail" type="email" placeholder="Email" required (blur)="registroForm.get('mail')?.markAsTouched()"/>
+      <div class="error" *ngIf="registroForm.get('mail')?.touched && registroForm.get('mail')?.invalid">
+        <small>Debe ingresar un email válido</small>
+      </div>
+
+      <!-- Contraseña -->
+      <input formControlName="contrasena" type="password" placeholder="Contraseña" required (blur)="registroForm.get('contrasena')?.markAsTouched()"/>
+      <div class="error" *ngIf="registroForm.get('contrasena')?.touched && registroForm.get('contrasena')?.invalid">
+        <small>La contraseña debe tener al menos 6 caracteres</small>
+      </div>
+
+      <!-- Campos adicionales para Paciente -->
+      <div *ngIf="tipoUsuario === 'Paciente'">
+        <input formControlName="obraSocial" placeholder="Obra Social" required (blur)="registroForm.get('obraSocial')?.markAsTouched()"/>
+        <div class="error" *ngIf="registroForm.get('obraSocial')?.touched && registroForm.get('obraSocial')?.invalid">
+          <small>La obra social es requerida</small>
+        </div>
+
+        <input type="file" (change)="onFileChange($event, 'imagenes')" required/>
+        <div class="error" *ngIf="registroForm.get('imagenes')?.touched && registroForm.get('imagenes')?.invalid">
+          <small>Debe cargar al menos una imagen</small>
+        </div>
+      </div>
+
+      <!-- Campos adicionales para Especialista -->
+      <div *ngIf="tipoUsuario === 'Especialista'">
+        <select formControlName="especialidad" required (blur)="registroForm.get('especialidad')?.markAsTouched()">
+          <option value="" disabled>Seleccione una especialidad</option>
+          <option *ngFor="let esp of especialidades" [value]="esp">{{ esp }}</option>
+        </select>
+        <div class="error" *ngIf="registroForm.get('especialidad')?.touched && registroForm.get('especialidad')?.invalid">
+          <small>Debe seleccionar una especialidad</small>
+        </div>
+
+        <button type="button" (click)="mostrarNuevaEspecialidad = true">Agregar Nueva Especialidad</button>
+
+        <div *ngIf="mostrarNuevaEspecialidad">
+          <input type="text" #nuevaEspecialidadInput placeholder="Nueva Especialidad"/>
+          <button type="button" (click)="agregarEspecialidad(nuevaEspecialidadInput.value); mostrarNuevaEspecialidad = false">Guardar Especialidad</button>
+        </div>
+
+        <input type="file" (change)="onFileChange($event, 'imagenPerfil')" required/>
+        <div class="error" *ngIf="registroForm.get('imagenPerfil')?.touched && registroForm.get('imagenPerfil')?.invalid">
+          <small>Debe cargar una imagen de perfil</small>
+        </div>
+      </div>
+
+      <!-- Botón de Registrar -->
+      <button type="submit">Registrar</button>
+    </form>
+
+    <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </div>
 </div>

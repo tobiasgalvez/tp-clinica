@@ -10,6 +10,11 @@
     <button type="submit">Login</button>
   </form>
 
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="error-message">
+    <small>{{ errorMessage }}</small>
+  </div>
+
   <!-- Botones de acceso rápido -->
   <div class="fav-buttons-container">
     <button *ngFor="let usuario of usuariosAccesoRapido" class="fav-button" (click)="loginConAccesoRapido(usuario)">
