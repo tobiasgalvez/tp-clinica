@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
     { nombre: 'Especialista 2', mail: 'especialista2@example.com', contrasena: 'password5' },
     { nombre: 'Admin', mail: 'admin2@admin2.com', contrasena: '101010' }
   ];
+  isLoading: boolean = true; // Nueva variable para controlar la carga
 
   constructor(private fb: FormBuilder, private auth: Auth, private firestore: Firestore, private router: Router, private storage: Storage) {
     this.loginForm = this.fb.group({
@@ -33,6 +34,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.cargarUsuariosAccesoRapido();
+
+    // Mostrar el spinner por 2 segundos
+    setTimeout(() => {
+      this.isLoading = false; // Ocultar el spinner después de 2 segundos
+    }, 2000);
   }
 
   async cargarUsuariosAccesoRapido() {

@@ -18,8 +18,15 @@ export class SeccionUsuariosComponent implements OnInit {
   usuarioForm: FormGroup;
   mostrarFormulario: boolean = false;
   errorMessage: string | undefined;
+  isLoading: boolean = true; // Nueva variable para mostrar el spinner
 
-  constructor(private firestore: Firestore, private fb: FormBuilder, private router: Router, private auth: Auth, private storage: Storage) {
+  constructor(
+    private firestore: Firestore,
+    private fb: FormBuilder,
+    private router: Router,
+    private auth: Auth,
+    private storage: Storage
+  ) {
     this.usuarioForm = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -33,9 +40,11 @@ export class SeccionUsuariosComponent implements OnInit {
 
   async ngOnInit() {
     await this.cargarUsuarios();
+    this.isLoading = false; // Ocultar el spinner una vez que los usuarios hayan sido cargados
   }
 
   async cargarUsuarios() {
+    this.isLoading = true; // Mostrar el spinner mientras se cargan los usuarios
     const administradoresSnapshot = await getDocs(collection(this.firestore, 'administradores'));
     const especialistasSnapshot = await getDocs(collection(this.firestore, 'especialistas'));
     const pacientesSnapshot = await getDocs(collection(this.firestore, 'pacientes'));
@@ -50,6 +59,7 @@ export class SeccionUsuariosComponent implements OnInit {
     pacientesSnapshot.forEach(doc => {
       this.usuarios.push({ id: doc.id, ...doc.data(), tipo: 'Paciente' });
     });
+    this.isLoading = false; // Ocultar el spinner una vez que los usuarios hayan sido cargados
   }
 
   async cambiarEstadoEspecialista(id: string, estadoActual: boolean) {

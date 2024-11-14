@@ -1,14 +1,18 @@
-<div class="registro-container" *ngIf="!tipoUsuario">
-  <button (click)="tipoUsuario = 'Paciente'" class="registro-boton">
-    <div class="registro-imagen registro-paciente"></div>
-    <span class="registro-texto">Registrar Paciente</span>
-  </button>
-  <button (click)="tipoUsuario = 'Especialista'" class="registro-boton">
-    <div class="registro-imagen registro-especialista"></div>
-    <span class="registro-texto">Registrar Especialista</span>
-  </button>
+<div *ngIf="isLoading" class="loading-spinner-container">
+  <div class="loading-spinner"></div>
 </div>
 
+<div *ngIf="!isLoading">
+  <div class="registro-container" *ngIf="!tipoUsuario">
+    <button (click)="tipoUsuario = 'Paciente'" class="registro-boton">
+      <div class="registro-imagen registro-paciente"></div>
+      <span class="registro-texto">Registrar Paciente</span>
+    </button>
+    <button (click)="tipoUsuario = 'Especialista'" class="registro-boton">
+      <div class="registro-imagen registro-especialista"></div>
+      <span class="registro-texto">Registrar Especialista</span>
+    </button>
+  </div>
 <div class="registro-form" *ngIf="tipoUsuario" [@formAnimation]>
   <h2>Registro de {{ tipoUsuario }}</h2>
   <form [formGroup]="registroForm" (ngSubmit)="registrar()">

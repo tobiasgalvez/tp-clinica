@@ -35,6 +35,7 @@ export class RegistroComponent implements OnInit {
   mostrarNuevaEspecialidad: boolean = false;
   siteKey: string = '6LeZj30qAAAAAB-KhPqsQ9-bHu-DJxyPTHYoiu8g'; // Coloca aquí tu Site Key de Google reCAPTCHA v2
   recaptchaResponse: string | null = null;
+  isLoading: boolean = true; // Nueva variable para el spinner de carga
 
   constructor(
     private fb: FormBuilder,
@@ -57,7 +58,12 @@ export class RegistroComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Mostrar el spinner por 2 segundos antes de mostrar el contenido del registro
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
+  }
 
   onFileChange(event: Event, controlName: string) {
     const input = event.target as HTMLInputElement;

@@ -13,18 +13,29 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 })
 export class HomeComponent implements OnInit {
   isAdmin: boolean = false;
+  isLoggedIn: boolean = false;
+  isLoading: boolean = true; // Nueva variable para el estado de carga
 
   constructor(public router: Router, private auth: Auth, private firestore: Firestore) {}
 
   ngOnInit(): void {
+    // Mostrar el spinner por 2 segundos
+    setTimeout(() => {
+      this.isLoading = false; // Ocultar el spinner después de 2 segundos
+    }, 2000);
+
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
       if (user) {
+        this.isLoggedIn = true;
         const userDocRef = doc(this.firestore, 'administradores', user.uid);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           this.isAdmin = true;
         }
+      } else {
+        this.isLoggedIn = false;
+        this.isAdmin = false;
       }
     });
   }
@@ -36,7 +47,7 @@ export class HomeComponent implements OnInit {
   async cerrarSesion() {
     try {
       await signOut(this.auth);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/home']);
     } catch (error) {
       console.error('Error al cerrar sesión: ', error);
     }
