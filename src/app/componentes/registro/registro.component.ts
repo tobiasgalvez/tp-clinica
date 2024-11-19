@@ -52,11 +52,13 @@ export class RegistroComponent implements OnInit {
       dni: ['', [Validators.required, Validators.pattern(/^[0-9]{7,8}$/)]],
       mail: ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.minLength(6)]],
-      obraSocial: [''], // La validación se establece dinámicamente
-      especialidad: [''], // La validación se establece dinámicamente
-      imagenes: [null], // La validación se establece dinámicamente
-      imagenPerfil: [null], // La validación se establece dinámicamente
-    });
+      obraSocial: [''],
+      especialidad: [''],
+      imagenes: [null],
+      imagenPerfil: [null],
+      recaptcha: ['', Validators.required]  // Añadir el campo reCAPTCHA al formulario
+   });
+   
   }
 
   ngOnInit(): void {
@@ -99,7 +101,7 @@ export class RegistroComponent implements OnInit {
   }
 
   async registrar() {
-    if (this.registroForm.valid /*&& this.recaptchaResponse*/) {
+    if (this.registroForm.valid && this.recaptchaResponse) {
       const datos = this.registroForm.value;
       try {
         // Crear usuario con email y contraseña
@@ -142,7 +144,7 @@ export class RegistroComponent implements OnInit {
         } else {
           await setDoc(doc(this.firestore, 'especialistas', userCredential.user.uid), { ...dataToSave, aprobado: false });
         }
-
+  
         // Mostrar SweetAlert de registro exitoso
         Swal.fire({
           title: '¡Registro exitoso!',
@@ -151,10 +153,10 @@ export class RegistroComponent implements OnInit {
           confirmButtonText: 'Aceptar',
           backdrop: false,
         });
-
+  
         // Cerrar la sesión del usuario después del registro
         await signOut(this.auth);
-
+  
         // Redirigir al home
         setTimeout(() => {
           this.router.navigate(['/home']);
@@ -168,10 +170,19 @@ export class RegistroComponent implements OnInit {
       this.errorMessage = 'Por favor complete todos los campos correctamente y valide el reCAPTCHA.';
     }
   }
+  
 
   agregarEspecialidad(nuevaEspecialidad: string) {
     if (nuevaEspecialidad && !this.especialidades.includes(nuevaEspecialidad)) {
       this.especialidades.push(nuevaEspecialidad);
     }
   }
+
+
+  handleCaptchaSuccess(response: string): void {
+    this.recaptchaResponse = response;
+  }
+  
+
+
 }

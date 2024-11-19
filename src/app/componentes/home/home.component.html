@@ -5,32 +5,47 @@
     </div>
     <nav class="navbar__links">
       <ul>
+        <!-- Accesos para todos los usuarios -->
         <li *ngIf="!isLoggedIn">
           <a routerLink="/login" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/login')">Login</a>
         </li>
         <li *ngIf="!isLoggedIn">
           <a routerLink="/registro" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/registro')">Registro</a>
         </li>
+        <li *ngIf="isLoggedIn">
+          <a routerLinkActive="active" class="navbar__link" (click)="cerrarSesion()">Cerrar Sesión</a>
+        </li>
+
+        <!-- Acceso exclusivo para Administradores -->
         <li *ngIf="isAdmin">
           <a routerLink="/seccion-usuarios" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/seccion-usuarios')">Usuarios</a>
         </li>
-        <li *ngIf="isLoggedIn">
-          <a routerLinkActive="active" class="navbar__link" (click)="cerrarSesion()">Cerrar Sesión</a>
+        <li *ngIf="isAdmin">
+          <a routerLink="/turnos" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/turnos')">Turnos</a>
+        </li>
+        <li *ngIf="isAdmin">
+          <a routerLink="/solicitar-turno" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/solicitar-turno')">Solicitar Turno</a>
+        </li>
+
+        <!-- Acceso a "Mis Turnos" para Pacientes -->
+        <li *ngIf="isPaciente">
+          <a routerLink="/mis-turnos" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/mis-turnos')">Mis Turnos</a>
+        </li>
+        <li *ngIf="isPaciente">
+          <a routerLink="/mi-perfil" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/mi-perfil')">Mi Perfil</a>
+        </li>
+        <li *ngIf="isPaciente">
+          <a routerLink="/solicitar-turno" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/solicitar-turno')">Solicitar Turno</a>
+        </li>
+
+        <!-- Acceso a "Mis Turnos" y "Mi Perfil" para Especialistas -->
+        <li *ngIf="isEspecialista">
+          <a routerLink="/mis-turnos-especialista" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/mis-turnos-especialista')">Mis Turnos</a>
+        </li>
+        <li *ngIf="isEspecialista">
+          <a routerLink="/mi-perfil" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/mi-perfil')">Mi Perfil</a>
         </li>
       </ul>
     </nav>
   </div>
 </header>
-
-<main>
-  <!-- Mostrar spinner de carga mientras `isLoading` sea `true` -->
-  <div *ngIf="isLoading" class="loading-spinner-container">
-    <div class="loading-spinner"></div>
-  </div>
-
-  <!-- Mostrar el contenido una vez que `isLoading` sea `false` -->
-  <div *ngIf="!isLoading">
-    <h2>Bienvenido a la Clínica XYZ</h2>
-    <p>Seleccione una opción para comenzar...</p>
-  </div>
-</main>

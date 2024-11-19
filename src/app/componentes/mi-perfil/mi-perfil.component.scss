@@ -1,0 +1,75 @@
+.perfil-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .perfil-info {
+    text-align: left;
+  }
+  
+  .perfil-imagen-container {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  
+  .perfil-imagen {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .disponibilidad-container {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .dia-container {
+    margin-bottom: 20px;
+  }
+  
+  .horarios-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .horario-card {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .horario-card.selected {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .horario-card:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .btn-update, .btn-download {
+    margin-top: 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-update:hover, .btn-download:hover {
+    background-color: #45a049;
+  }
+  

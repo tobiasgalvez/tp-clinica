@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Auth, getAuth, createUserWithEmailAndPassword, sendEmailVerification } from '@angular/fire/auth';
 import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import * as XLSX from 'xlsx';
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 
 @Component({
   selector: 'app-seccion-usuarios',
@@ -13,6 +15,7 @@ import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage
   templateUrl: './seccion-usuarios.component.html',
   styleUrls: ['./seccion-usuarios.component.scss']
 })
+
 export class SeccionUsuariosComponent implements OnInit {
   usuarios: any[] = [];
   usuarioForm: FormGroup;
@@ -121,4 +124,19 @@ export class SeccionUsuariosComponent implements OnInit {
       this.errorMessage = 'Por favor complete todos los campos correctamente';
     }
   }
+
+
+
+  descargarUsuariosExcel() {
+    const worksheet = XLSX.utils.json_to_sheet(this.usuarios);
+    const workbook = { Sheets: { 'Datos Usuarios': worksheet }, SheetNames: ['Datos Usuarios'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: EXCEL_TYPE });
+    const filename = `usuarios_${new Date().toISOString()}.xlsx`;
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(data);
+    link.download = filename;
+    link.click();
+  }
+
 }

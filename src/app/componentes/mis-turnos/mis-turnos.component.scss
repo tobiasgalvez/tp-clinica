@@ -1,0 +1,81 @@
+.titulo-turnos {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-filtro {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .input-filtro {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .btn-filtrar {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-filtrar:hover {
+    background-color: #45a049;
+  }
+  
+  .turnos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .turnos-table th,
+  .turnos-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .turnos-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .turnos-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .turnos-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .botones-turno {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .btn-cancelar,
+  .btn-ver-resenia,
+  .btn-completar-encuesta,
+  .btn-calificar {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-cancelar:hover,
+  .btn-ver-resenia:hover,
+  .btn-completar-encuesta:hover,
+  .btn-calificar:hover {
+    background-color: #45a049;
+  }
+  

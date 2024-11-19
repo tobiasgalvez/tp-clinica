@@ -16,6 +16,7 @@
 
   <div class="registro-form" *ngIf="tipoUsuario" [@formAnimation]>
     <h2>Registro de {{ tipoUsuario }}</h2>
+    <!-- Asegúrate de tener el formGroup enlazado al registroForm -->
     <form [formGroup]="registroForm" (ngSubmit)="registrar()">
       <!-- Nombre -->
       <input formControlName="nombre" placeholder="Nombre" required (blur)="registroForm.get('nombre')?.markAsTouched()"/>
@@ -86,6 +87,18 @@
         <input type="file" (change)="onFileChange($event, 'imagenPerfil')" required/>
         <div class="error" *ngIf="registroForm.get('imagenPerfil')?.touched && registroForm.get('imagenPerfil')?.invalid">
           <small>Debe cargar una imagen de perfil</small>
+        </div>
+      </div>
+
+      <!-- reCAPTCHA v2 -->
+      <div class="recaptcha-container">
+        <ngx-recaptcha2
+          [siteKey]="siteKey"
+          formControlName="recaptcha"
+          (success)="handleCaptchaSuccess($event)">
+        </ngx-recaptcha2>
+        <div class="error" *ngIf="registroForm.get('recaptcha')?.touched && registroForm.get('recaptcha')?.invalid">
+          <small>Debe completar el reCAPTCHA</small>
         </div>
       </div>
 

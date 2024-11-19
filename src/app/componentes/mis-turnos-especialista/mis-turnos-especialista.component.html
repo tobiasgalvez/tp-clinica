@@ -1,0 +1,43 @@
+<h2 class="titulo-turnos">Mis Turnos</h2>
+
+<!-- Formulario de Filtro -->
+<form [formGroup]="filterForm" (ngSubmit)="filtrarTurnos()" class="form-filtro">
+  <input formControlName="especialidad" placeholder="Filtrar por Especialidad" class="input-filtro">
+  <input formControlName="paciente" placeholder="Filtrar por Paciente" class="input-filtro">
+  <button type="submit" class="btn-filtrar">Filtrar</button>
+</form>
+
+<!-- Tabla de Turnos -->
+<table class="tabla-turnos" *ngIf="filteredTurnos.length > 0">
+  <thead>
+    <tr>
+      <th>Paciente</th>
+      <th>Especialidad</th>
+      <th>Fecha y Hora</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of filteredTurnos">
+      <td>{{ turno.nombrePaciente }}</td>
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.fechaHora }}</td>
+      <td [ngClass]="turno.estado">{{ turno.estado }}</td>
+      <td>
+        <div class="acciones">
+          <button *ngIf="turno.estado === 'pendiente'" (click)="aceptarTurno(turno.id)" class="btn-accion">Aceptar</button>
+          <button *ngIf="turno.estado === 'pendiente'" (click)="rechazarTurno(turno.id, 'Motivo de rechazo')" class="btn-accion">Rechazar</button>
+          <button *ngIf="turno.estado === 'Aceptado'" (click)="finalizarTurno(turno.id, 'Reseña de diagnóstico')" class="btn-accion">Finalizar</button>
+          <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno.id, 'Motivo de cancelación')" class="btn-accion">Cancelar</button>
+          <button *ngIf="turno.resenia" (click)="verResenia(turno.resenia)" class="btn-accion">Ver Reseña</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Mensaje si no hay turnos -->
+<div *ngIf="filteredTurnos.length === 0" class="sin-turnos">
+  <p>No hay turnos disponibles.</p>
+</div>

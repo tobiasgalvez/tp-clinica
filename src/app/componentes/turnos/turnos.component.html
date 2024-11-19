@@ -1,0 +1,53 @@
+<div class="filtros">
+    <label for="especialidad">Buscar por Especialidad:</label>
+    <input id="especialidad" type="text" formControlName="especialidad" (input)="filtrarTurnos()">
+    
+    <label for="especialista">Buscar por Especialista:</label>
+    <input id="especialista" type="text" formControlName="especialista" (input)="filtrarTurnos()">
+  </div>
+  
+  <div *ngIf="turnos.length > 0" class="lista-turnos">
+    <div *ngFor="let turno of turnos" class="turno-item">
+      <h3>Especialista: {{ turno.nombreEspecialista }}</h3>
+      <p>Especialidad: {{ turno.especialidad }}</p>
+      <p>Fecha y Hora: {{ turno.fechaHora }}</p>
+      <p>Estado: <span [ngClass]="turno.estado">{{ turno.estado }}</span></p>
+  
+      <!-- Acciones disponibles según el estado del turno -->
+      <div class="acciones">
+        <button *ngIf="turno.estado === 'Pendiente'" (click)="cancelarTurno(turno.id, 'Motivo de cancelación')">Cancelar Turno</button>
+        <button *ngIf="turno.resenia" (click)="verResenia(turno.resenia)">Ver Reseña</button>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="turnos.length === 0" class="sin-turnos">
+    <p>No hay turnos disponibles.</p>
+  </div>
+  <div class="filtros">
+    <label for="especialidad">Buscar por Especialidad:</label>
+    <input id="especialidad" type="text" formControlName="especialidad" (input)="filtrarTurnos()">
+    
+    <label for="especialista">Buscar por Especialista:</label>
+    <input id="especialista" type="text" formControlName="especialista" (input)="filtrarTurnos()">
+  </div>
+  
+  <div *ngIf="turnos.length > 0" class="lista-turnos">
+    <div *ngFor="let turno of turnos" class="turno-item">
+      <h3>Especialista: {{ turno.nombreEspecialista }}</h3>
+      <p>Especialidad: {{ turno.especialidad }}</p>
+      <p>Fecha y Hora: {{ turno.fechaHora }}</p>
+      <p>Estado: <span [ngClass]="turno.estado">{{ turno.estado }}</span></p>
+  
+      <!-- Acciones disponibles según el estado del turno -->
+      <div class="acciones">
+        <button *ngIf="turno.estado === 'Pendiente'" (click)="cancelarTurno(turno.id, 'Motivo de cancelación')">Cancelar Turno</button>
+        <button *ngIf="turno.resenia" (click)="verResenia(turno.resenia)">Ver Reseña</button>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="turnos.length === 0" class="sin-turnos">
+    <p>No hay turnos disponibles.</p>
+  </div>
+    

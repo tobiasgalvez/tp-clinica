@@ -40,8 +40,17 @@ export class LoginComponent implements OnInit {
     }, 2000);
   }
 
-  async cargarUsuariosAccesoRapido() {
-    // Código para cargar usuarios
+  cargarUsuariosAccesoRapido() {
+    // Asignar imágenes estáticas a cada tipo de usuario
+    for (const usuario of this.usuariosAccesoRapido) {
+      if (usuario.nombre.includes('Admin')) {
+        usuario.imagenPerfil = 'assets/admin.png'; // Imagen para administradores
+      } else if (usuario.nombre.includes('Especialista')) {
+        usuario.imagenPerfil = 'assets/especialista.png'; // Imagen para especialistas
+      } else {
+        usuario.imagenPerfil = 'assets/paciente.png'; // Imagen para pacientes
+      }
+    }
   }
 
   async login() {

@@ -1,0 +1,49 @@
+<div *ngIf="usuario" class="perfil-container">
+  <h2>Mi Perfil</h2>
+  <div class="perfil-info">
+    <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+    <p><strong>Email:</strong> {{ usuario.mail }}</p>
+  </div>
+
+  <!-- Mostrar imagen del perfil -->
+  <div *ngIf="usuario.imagenPerfil || (usuario.imagenes && usuario.imagenes.length > 0)" class="perfil-imagen-container">
+    <img *ngIf="usuario.imagenPerfil" [src]="usuario.imagenPerfil" alt="Imagen de perfil del especialista" class="perfil-imagen">
+    <img *ngIf="!usuario.imagenPerfil && usuario.imagenes && usuario.imagenes.length > 0" [src]="usuario.imagenes[0]" alt="Imagen de perfil del paciente" class="perfil-imagen">
+  </div>
+
+  <!-- Disponibilidad Horaria para Especialistas -->
+  <div *ngIf="usuario.tipo === 'especialista'" class="disponibilidad-container">
+    <h3>Disponibilidad Horaria</h3>
+
+    <!-- Selección de Rango horario para Lunes a Viernes -->
+    <div class="horario-rango">
+      <h4>Lunes a Viernes</h4>
+      <select [(ngModel)]="lunesViernesRango">
+        <option *ngFor="let rango of rangosHorariosLunesViernes" [value]="rango">{{ rango }}</option>
+      </select>
+    </div>
+
+    <!-- Selección de Rango horario para Sábados -->
+    <div class="horario-rango">
+      <h4>Sábados</h4>
+      <label>
+        <input type="checkbox" [(ngModel)]="habilitarSabado" />
+        Habilitar disponibilidad para sábados
+      </label>
+      <div *ngIf="habilitarSabado">
+        <label for="sabadoRango">Seleccionar horario:</label>
+        <select id="sabadoRango" [(ngModel)]="sabadoRango">
+          <option [value]="rangoHorarioSabado">{{ rangoHorarioSabado }}</option>
+        </select>
+      </div>
+    </div>
+
+    <button (click)="actualizarDisponibilidadHoraria()" class="btn-update">Actualizar Horarios</button>
+  </div>
+
+  <!-- Botón para descargar la Historia Clínica -->
+  <div *ngIf="usuario.tipo === 'paciente'" class="historia-clinica-container">
+    <button (click)="descargarHistoriaClinicaPDF()" class="btn-download">Descargar Historia Clínica</button>
+  </div>
+</div>

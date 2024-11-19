@@ -1,0 +1,43 @@
+<h2 class="titulo-turnos">Mis Turnos</h2>
+
+<!-- Formulario de Filtro -->
+<form [formGroup]="filterForm" (ngSubmit)="filtrarTurnos()" class="form-filtro">
+  <input formControlName="especialidad" placeholder="Filtrar por Especialidad" class="input-filtro">
+  <input formControlName="especialista" placeholder="Filtrar por Especialista" class="input-filtro">
+  <button type="submit" class="btn-filtrar">Filtrar</button>
+</form>
+
+<!-- Tabla de Turnos -->
+<table class="turnos-table">
+  <thead>
+    <tr>
+      <th>Especialidad</th>
+      <th>Especialista</th>
+      <th>Fecha</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of filteredTurnos">
+      <td>{{ turno.especialidad }}</td>
+      <td>{{ turno.nombreEspecialista }}</td>
+      <td>{{ turno.fechaHora }}</td>
+      <td>{{ turno.estado }}</td>
+      <td>
+        <button *ngIf="turno.estado === 'Pendiente'" (click)="cancelarTurno(turno.id)" class="btn-cancelar">
+          Cancelar Turno
+        </button>
+        <button *ngIf="turno.estado === 'Realizado' && turno.resenia" (click)="verResenia(turno.resenia)" class="btn-ver-resenia">
+          Ver Reseña
+        </button>
+        <button *ngIf="turno.estado === 'Realizado' && !turno.encuestaCompletada" (click)="completarEncuesta(turno.id)" class="btn-completar-encuesta">
+          Completar Encuesta
+        </button>
+        <button *ngIf="turno.estado === 'Realizado' && !turno.atencionCalificada" (click)="calificarAtencion(turno.id)" class="btn-calificar">
+          Calificar Atención
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

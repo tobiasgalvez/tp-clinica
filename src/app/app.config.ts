@@ -9,6 +9,7 @@ import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import {environment} from '../environment/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import jsPDF from 'jspdf';
 
 export const appConfig: ApplicationConfig = {
   providers: 
@@ -20,6 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()), 
     provideMessaging(() => getMessaging()),
     provideStorage(() => getStorage()),
-    importProvidersFrom(BrowserAnimationsModule)
+    importProvidersFrom(BrowserAnimationsModule),
   ]
 };

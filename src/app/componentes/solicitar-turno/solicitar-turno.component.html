@@ -1,0 +1,45 @@
+<!-- Mostrar Especialidades -->
+<div class="especialidades-container">
+  <h3>Seleccione una especialidad:</h3>
+  <div class="especialidades-grid">
+    <button *ngFor="let especialidad of especialidades" class="especialidad-button" (click)="seleccionarEspecialidad(especialidad.nombre)">
+      <img [src]="especialidad.imagen" alt="Especialidad {{ especialidad.nombre }}">
+    </button>
+  </div>
+</div>
+
+<!-- Mostrar Especialistas solo si hay una especialidad seleccionada -->
+<div *ngIf="seleccionEspecialidad && especialistas.length > 0" class="especialistas-container">
+  <h3>Seleccione un especialista:</h3>
+  <div class="especialistas-grid">
+    <button *ngFor="let especialista of especialistas" class="especialista-button" (click)="seleccionarEspecialista(especialista)">
+      <img [src]="especialista.imagenPerfil || 'assets/default-specialist.png'" alt="{{ especialista.nombre }}">
+      <span class="span-especialista">{{ especialista.apellido }}, {{ especialista.nombre }}</span>
+    </button>
+  </div>
+</div>
+
+<!-- Mostrar Días Disponibles solo si se selecciona un especialista -->
+<div *ngIf="seleccionEspecialista && diasDisponibles.length > 0" class="dias-container">
+  <h3>Seleccione un día disponible:</h3>
+  <div class="dias-grid">
+    <button *ngFor="let dia of diasDisponibles" class="dia-button" (click)="seleccionarDia(dia)">
+      {{ dia | date: 'fullDate' }}
+    </button>
+  </div>
+</div>
+
+<!-- Mostrar Horarios disponibles solo si se selecciona un día -->
+<div *ngIf="seleccionDia && horariosDisponibles.length > 0" class="horarios-container">
+  <h3>Seleccione un horario disponible:</h3>
+  <div class="horarios-grid">
+    <button *ngFor="let horario of horariosDisponibles" class="horario-button" (click)="solicitarTurno(horario)">
+      {{ horario }}
+    </button>
+  </div>
+</div>
+
+<!-- Mensaje si no hay horarios disponibles -->
+<div *ngIf="seleccionDia && horariosDisponibles.length === 0" class="no-horarios">
+  <p>No hay horarios disponibles para este día.</p>
+</div>
