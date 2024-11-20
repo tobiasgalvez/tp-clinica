@@ -69,20 +69,25 @@
 
       <!-- Campos adicionales para Especialista -->
       <div *ngIf="tipoUsuario === 'Especialista'">
-        <select formControlName="especialidad" required (blur)="registroForm.get('especialidad')?.markAsTouched()">
+        <!-- <select formControlName="especialidad" required (blur)="registroForm.get('especialidad')?.markAsTouched()">
+          <option value="" disabled>Seleccione una especialidad</option>
+          <option *ngFor="let esp of especialidades" [value]="esp">{{ esp }}</option>
+        </select> -->
+        <select formControlName="especialidad" required (blur)="registroForm.get('especialidad')?.markAsTouched()" (change)="onSelectEspecialidad()">
           <option value="" disabled>Seleccione una especialidad</option>
           <option *ngFor="let esp of especialidades" [value]="esp">{{ esp }}</option>
         </select>
+        
         <div class="error" *ngIf="registroForm.get('especialidad')?.touched && registroForm.get('especialidad')?.invalid">
           <small>Debe seleccionar una especialidad</small>
         </div>
 
-        <button type="button" (click)="mostrarNuevaEspecialidad = true">Agregar Nueva Especialidad</button>
+        <!-- <button type="button" (click)="mostrarNuevaEspecialidad = true">Agregar Nueva Especialidad</button> -->
 
-        <div *ngIf="mostrarNuevaEspecialidad">
+        <!-- <div *ngIf="mostrarNuevaEspecialidad">
           <input type="text" #nuevaEspecialidadInput placeholder="Nueva Especialidad"/>
           <button type="button" (click)="agregarEspecialidad(nuevaEspecialidadInput.value); mostrarNuevaEspecialidad = false">Guardar Especialidad</button>
-        </div>
+        </div> -->
 
         <input type="file" (change)="onFileChange($event, 'imagenPerfil')" required/>
         <div class="error" *ngIf="registroForm.get('imagenPerfil')?.touched && registroForm.get('imagenPerfil')?.invalid">

@@ -7,7 +7,7 @@ import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Router } from '@angular/router';
 import { NgxCaptchaModule } from 'ngx-captcha';
-import Swal from 'sweetalert2';  // Importación de SweetAlert2
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
@@ -34,9 +34,9 @@ export class RegistroComponent implements OnInit {
   especialidades: string[] = ['Cardiología', 'Pediatría', 'Neurología'];
   errorMessage: string = '';
   mostrarNuevaEspecialidad: boolean = false;
-  siteKey: string = '6LeZj30qAAAAAB-KhPqsQ9-bHu-DJxyPTHYoiu8g'; // Coloca aquí tu Site Key de Google reCAPTCHA v2
+  siteKey: string = '6LeZj30qAAAAAB-KhPqsQ9-bHu-DJxyPTHYoiu8g';
   recaptchaResponse: string | null = null;
-  isLoading: boolean = true; // Nueva variable para el spinner de carga
+  isLoading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -53,16 +53,15 @@ export class RegistroComponent implements OnInit {
       mail: ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.minLength(6)]],
       obraSocial: [''],
-      especialidad: [''],
+      especialidad: ['', Validators.required],
+      especialidad2: [''],  // Añadir el campo para una especialidad adicional
       imagenes: [null],
       imagenPerfil: [null],
-      recaptcha: ['', Validators.required]  // Añadir el campo reCAPTCHA al formulario
-   });
-   
+      recaptcha: ['', Validators.required]
+    });
   }
 
   ngOnInit(): void {
-    // Mostrar el spinner por 2 segundos antes de mostrar el contenido del registro
     setTimeout(() => {
       this.isLoading = false;
     }, 2000);
@@ -71,13 +70,11 @@ export class RegistroComponent implements OnInit {
   seleccionarTipoUsuario(tipo: 'Paciente' | 'Especialista') {
     this.tipoUsuario = tipo;
 
-    // Limpiar las validaciones actuales
     this.registroForm.get('obraSocial')?.clearValidators();
     this.registroForm.get('imagenes')?.clearValidators();
     this.registroForm.get('especialidad')?.clearValidators();
     this.registroForm.get('imagenPerfil')?.clearValidators();
 
-    // Aplicar validaciones según el tipo de usuario
     if (tipo === 'Paciente') {
       this.registroForm.get('obraSocial')?.setValidators(Validators.required);
       this.registroForm.get('imagenes')?.setValidators(Validators.required);
@@ -86,7 +83,6 @@ export class RegistroComponent implements OnInit {
       this.registroForm.get('imagenPerfil')?.setValidators(Validators.required);
     }
 
-    // Actualizar el estado de las validaciones
     this.registroForm.get('obraSocial')?.updateValueAndValidity();
     this.registroForm.get('imagenes')?.updateValueAndValidity();
     this.registroForm.get('especialidad')?.updateValueAndValidity();
@@ -104,11 +100,9 @@ export class RegistroComponent implements OnInit {
     if (this.registroForm.valid && this.recaptchaResponse) {
       const datos = this.registroForm.value;
       try {
-        // Crear usuario con email y contraseña
         const userCredential = await createUserWithEmailAndPassword(this.auth, datos.mail, datos.contrasena);
         await sendEmailVerification(userCredential.user);
   
-        // Subir archivos a Firebase Storage
         const fileUrls: string[] = [];
         if (datos.imagenes && datos.imagenes.length > 0) {
           for (let i = 0; i < datos.imagenes.length; i++) {
@@ -121,7 +115,6 @@ export class RegistroComponent implements OnInit {
           }
         }
   
-        // Subir imagen de perfil si es un especialista
         let imagenPerfilUrl = '';
         if (this.tipoUsuario === 'Especialista' && datos.imagenPerfil && datos.imagenPerfil.length > 0) {
           const file = datos.imagenPerfil[0];
@@ -131,21 +124,20 @@ export class RegistroComponent implements OnInit {
           imagenPerfilUrl = await getDownloadURL(storageRef);
         }
   
-        // Crear datos para guardar en Firestore
         const dataToSave = {
           ...datos,
           imagenes: fileUrls.length > 0 ? fileUrls : null,
-          imagenPerfil: imagenPerfilUrl || null
+          imagenPerfil: imagenPerfilUrl || null,
+          aprobado: this.tipoUsuario === 'Especialista' ? false : undefined // Solo para especialistas
         };
   
         // Guardar datos en la colección adecuada
         if (this.tipoUsuario === 'Paciente') {
           await setDoc(doc(this.firestore, 'pacientes', userCredential.user.uid), dataToSave);
         } else {
-          await setDoc(doc(this.firestore, 'especialistas', userCredential.user.uid), { ...dataToSave, aprobado: false });
+          await setDoc(doc(this.firestore, 'especialistas', userCredential.user.uid), dataToSave);
         }
   
-        // Mostrar SweetAlert de registro exitoso
         Swal.fire({
           title: '¡Registro exitoso!',
           text: 'Por favor, verifica tu correo electrónico para activar tu cuenta.',
@@ -154,10 +146,7 @@ export class RegistroComponent implements OnInit {
           backdrop: false,
         });
   
-        // Cerrar la sesión del usuario después del registro
         await signOut(this.auth);
-  
-        // Redirigir al home
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 1000);
@@ -170,7 +159,29 @@ export class RegistroComponent implements OnInit {
       this.errorMessage = 'Por favor complete todos los campos correctamente y valide el reCAPTCHA.';
     }
   }
-  
+
+  async onSelectEspecialidad() {
+    const result = await Swal.fire({
+      title: '¿Desea añadir otra especialidad?',
+      input: 'text',
+      inputLabel: 'Ingrese la nueva especialidad (mínimo 6 letras)',
+      inputPlaceholder: 'Nueva especialidad',
+      inputValidator: (value) => {
+        if (!value || value.length < 6) {
+          return 'La especialidad debe tener al menos 6 caracteres';
+        }
+        return null;
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Añadir',
+      cancelButtonText: 'Cancelar',
+    });
+
+    if (result.isConfirmed && result.value) {
+      this.agregarEspecialidad(result.value);
+      this.registroForm.get('especialidad2')?.setValue(result.value);  // Asignar el valor a especialidad2
+    }
+  }
 
   agregarEspecialidad(nuevaEspecialidad: string) {
     if (nuevaEspecialidad && !this.especialidades.includes(nuevaEspecialidad)) {
@@ -178,11 +189,7 @@ export class RegistroComponent implements OnInit {
     }
   }
 
-
   handleCaptchaSuccess(response: string): void {
     this.recaptchaResponse = response;
   }
-  
-
-
 }
