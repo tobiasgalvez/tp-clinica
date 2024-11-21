@@ -31,6 +31,7 @@ export class MisTurnosComponent implements OnInit {
   turnos: Turno[] = [];
   filteredTurnos: Turno[] = [];
   filterForm: FormGroup;
+  isLoading: boolean = true;
 
   constructor(private firestore: Firestore, private auth: Auth, private fb: FormBuilder) {
     this.filterForm = this.fb.group({
@@ -42,6 +43,9 @@ export class MisTurnosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTurnos();
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
   }
 
   async cargarTurnos() {

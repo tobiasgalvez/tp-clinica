@@ -42,11 +42,15 @@ export class MiPerfilComponent implements OnInit {
   disponibilidad: { especialidad: string, dia: string, horarios: { hora: string, estado: string }[] }[] = [];
   especialidades: string[] = [];
   especialidadSeleccionada: string = '';
+  isLoading: boolean = true;
 
   constructor(private firestore: Firestore, private auth: Auth) {}
 
   ngOnInit(): void {
     this.cargarPerfil();
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
   }
 
   async cargarPerfil() {

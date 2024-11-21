@@ -44,7 +44,9 @@ export class SeccionUsuariosComponent implements OnInit {
 
   async ngOnInit() {
     await this.cargarUsuarios();
-    this.isLoading = false; // Ocultar el spinner una vez que los usuarios hayan sido cargados
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
   }
 
   async cargarUsuarios() {

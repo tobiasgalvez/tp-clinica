@@ -24,6 +24,7 @@ export class MisTurnosEspecialistaComponent implements OnInit {
   historiaClinicaForm?: FormGroup;
   pacienteSeleccionado?: any; // Paciente seleccionado para cargar la historia clínica
   filteredPacientesAtendidos: any[] = []; // Nueva propiedad
+  isLoading: boolean = true;
 
   constructor(private firestore: Firestore, private auth: Auth, private fb: FormBuilder) {
     this.filterForm = this.fb.group({
@@ -35,6 +36,9 @@ export class MisTurnosEspecialistaComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTurnos();
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
     this.filteredTurnos = [...this.turnos];
     this.filteredPacientesAtendidos = [...this.pacientesAtendidos];
   }

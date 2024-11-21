@@ -16,6 +16,7 @@ export class TurnosComponent {
   turnos: any[] = [];
   filteredTurnos: any[] = [];
   filterForm: FormGroup;
+  isLoading: boolean = true;
 
   constructor(private firestore: Firestore, private fb: FormBuilder) {
     this.filterForm = this.fb.group({
@@ -26,6 +27,9 @@ export class TurnosComponent {
 
   ngOnInit(): void {
     this.cargarTurnos();
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
   }
 
   async cargarTurnos() {

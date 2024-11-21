@@ -34,9 +34,13 @@ export class SolicitarTurnoComponent implements OnInit {
   pacienteSeleccionado: any | null = null;
   esAdministrador: boolean = false;
   seleccionEspecialidadImagen: string | undefined;
+  isLoading: boolean = true;
   constructor(private firestore: Firestore, private auth: Auth, private router: Router) {}
 
   ngOnInit() {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
     this.verificarRolUsuario();
     this.cargarEspecialidades();
   }
