@@ -14,7 +14,7 @@ La clínica está abierta al público de lunes a viernes de 8:00 a 19:00 y los s
 ## Pantallas de la Aplicación
 1. **Pantalla Principal (Home)**: Es la pantalla de bienvenida que muestra el nombre de la clínica y ofrece los accesos a **Login** y **Registro**.
 
-   ![Pantalla Principal](./assets/screenshot_home.png)  
+   ![Pantalla Principal](./src/assets/screenshot_home.png)  
 
 2. **Login**: Esta pantalla permite a los usuarios iniciar sesión con su correo electrónico y contraseña. También cuenta con botones de acceso rápido para facilitar el ingreso.
 
