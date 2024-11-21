@@ -88,14 +88,28 @@ export class InformesAdministradorComponent implements OnInit {
 
   obtenerTurnosPorDia(turnos: any[]): any[] {
     const turnosPorDia: { [key: string]: number } = {};
+  
     turnos.forEach(turno => {
       if (turno.fechaHora) {
-        const fecha = new Date(turno.fechaHora).toLocaleDateString();
-        turnosPorDia[fecha] = (turnosPorDia[fecha] || 0) + 1;
+        try {
+          // Extraer solo la parte de la fecha de 'fechaHora'
+          const [diaSemana, resto] = turno.fechaHora.split(", ");
+          const [fecha, _] = resto.split(" - ");
+  
+          // Reconstruir la fecha para un formato único (e.g., "jueves, 5 de diciembre de 2024")
+          const fechaCompleta = `${diaSemana}, ${fecha}`;
+  
+          turnosPorDia[fechaCompleta] = (turnosPorDia[fechaCompleta] || 0) + 1;
+        } catch (error) {
+          console.warn(`Error procesando la fechaHora: ${turno.fechaHora}`, error);
+        }
       }
     });
+  
     return Object.keys(turnosPorDia).map(key => ({ dia: key, cantidad: turnosPorDia[key] }));
   }
+  
+  
 
   obtenerTurnosPorMedico(turnos: any[], estado: string): any[] {
     const turnosPorMedico: { [key: string]: number } = {};
