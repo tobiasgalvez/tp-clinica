@@ -19,8 +19,8 @@ export class LoginComponent implements OnInit {
   errorMessage: string = '';  // Nueva variable para almacenar el mensaje de error
   usuariosAccesoRapido: any[] = [
     { nombre: 'Paciente 1', mail: 'marimonz@yopmail.com', contrasena: '101010' },
-    { nombre: 'Paciente 2', mail: 'paciente2@example.com', contrasena: 'password2' },
-    { nombre: 'Paciente 3', mail: 'paciente3@example.com', contrasena: 'password3' },
+    { nombre: 'Paciente 2', mail: 'gago@yopmail.com', contrasena: '101010' },
+    { nombre: 'Paciente 3', mail: 'pepeargento@yopmail.com', contrasena: '101010' },
     { nombre: 'Especialista 1', mail: 'gusgomez@yopmail.com', contrasena: '101010' },
     { nombre: 'Especialista 2', mail: 'maudom@yopmail.com', contrasena: '101010' },
     { nombre: 'Admin', mail: 'admin2@admin2.com', contrasena: '101010' }
