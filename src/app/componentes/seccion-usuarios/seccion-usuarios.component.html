@@ -23,6 +23,8 @@
 
   <div *ngIf="usuarios.length > 0" class="usuarios-lista">
     <h3>Listado de Usuarios</h3>
+    <button (click)="descargarUsuariosExcel()" class="btn-excel">Descargar Usuarios en Excel</button>
+    <br><hr>
     <table>
       <thead>
         <tr>
@@ -56,4 +58,5 @@
       </tbody>
     </table>
   </div>
+  
 </div>

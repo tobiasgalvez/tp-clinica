@@ -6,12 +6,13 @@ import { Router } from '@angular/router';
 import { Auth, getAuth, createUserWithEmailAndPassword, sendEmailVerification } from '@angular/fire/auth';
 import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import * as XLSX from 'xlsx';
+import { HoverColorDirective } from '../../directives/hover-color.directive';
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 
 @Component({
   selector: 'app-seccion-usuarios',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, HoverColorDirective],
   templateUrl: './seccion-usuarios.component.html',
   styleUrls: ['./seccion-usuarios.component.scss']
 })
@@ -128,15 +129,33 @@ export class SeccionUsuariosComponent implements OnInit {
 
 
   descargarUsuariosExcel() {
-    const worksheet = XLSX.utils.json_to_sheet(this.usuarios);
+    // Crear una hoja de trabajo (worksheet) de Excel a partir de los datos de los usuarios
+    const worksheet = XLSX.utils.json_to_sheet(this.usuarios.map(usuario => {
+      return {
+        Nombre: usuario.nombre,
+        Apellido: usuario.apellido,
+        Edad: usuario.edad,
+        DNI: usuario.dni,
+        Email: usuario.mail,
+        Tipo: usuario.tipo,
+        Estado: usuario.tipo === 'Especialista' ? (usuario.aprobado ? 'Habilitado' : 'Inhabilitado') : 'N/A'
+      };
+    }));
+  
+    // Crear el libro de Excel (workbook) que contendrá la hoja de trabajo
     const workbook = { Sheets: { 'Datos Usuarios': worksheet }, SheetNames: ['Datos Usuarios'] };
+  
+    // Convertir el libro de Excel a un buffer binario
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  
+    // Crear un archivo Blob con los datos y especificar el tipo MIME
     const data: Blob = new Blob([excelBuffer], { type: EXCEL_TYPE });
-    const filename = `usuarios_${new Date().toISOString()}.xlsx`;
+  
+    // Crear un enlace temporal para forzar la descarga del archivo
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(data);
-    link.download = filename;
+    link.download = `usuarios_${new Date().toISOString().slice(0, 10)}.xlsx`;
     link.click();
   }
-
+  
 }

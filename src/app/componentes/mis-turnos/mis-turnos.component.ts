@@ -1,23 +1,23 @@
-// Importaciones...
 import { Component, OnInit } from '@angular/core';
 import { Firestore, collection, query, where, getDocs, updateDoc, doc, getDoc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { EstadoPipe } from '../../pipes/estado.pipe';
+import { HoverColorDirective } from '../../directives/hover-color.directive';
 
-// Definir la interfaz Turno
 interface Turno {
   id: string;
   especialidad: string;
   especialista: string;
-  nombreEspecialista?: string; // Este campo se agregará dinámicamente
+  nombreEspecialista?: string;
   fechaHora: string;
   estado?: string;
   resenia?: string;
   encuestaCompletada?: boolean;
   atencionCalificada?: boolean;
-  [key: string]: any; // Para otros campos adicionales
+  [key: string]: any;
 }
 
 @Component({
@@ -25,7 +25,7 @@ interface Turno {
   templateUrl: './mis-turnos.component.html',
   styleUrls: ['./mis-turnos.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, EstadoPipe, HoverColorDirective]
 })
 export class MisTurnosComponent implements OnInit {
   turnos: Turno[] = [];
@@ -35,7 +35,8 @@ export class MisTurnosComponent implements OnInit {
   constructor(private firestore: Firestore, private auth: Auth, private fb: FormBuilder) {
     this.filterForm = this.fb.group({
       especialidad: [''],
-      especialista: ['']
+      especialista: [''],
+      busquedaGeneral: ['']
     });
   }
 
@@ -129,13 +130,23 @@ export class MisTurnosComponent implements OnInit {
   }
 
   filtrarTurnos() {
-    const { especialidad, especialista } = this.filterForm.value;
+    const { especialidad, especialista, busquedaGeneral } = this.filterForm.value;
 
     this.filteredTurnos = this.turnos.filter(turno => {
+      // Filtrar por especialidad y especialista
       const cumpleEspecialidad = especialidad ? turno.especialidad.includes(especialidad) : true;
       const cumpleEspecialista = especialista ? turno.nombreEspecialista?.includes(especialista) : true;
 
-      return cumpleEspecialidad && cumpleEspecialista;
+      // Filtrar por búsqueda general en todos los campos relevantes
+      let cumpleBusquedaGeneral = true;
+      if (busquedaGeneral) {
+        const busqueda = busquedaGeneral.toLowerCase();
+        cumpleBusquedaGeneral = Object.values(turno).some(value =>
+          typeof value === 'string' && value.toLowerCase().includes(busqueda)
+        );
+      }
+
+      return cumpleEspecialidad && cumpleEspecialista && cumpleBusquedaGeneral;
     });
   }
 }

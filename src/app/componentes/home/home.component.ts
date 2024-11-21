@@ -3,11 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Auth, getAuth, onAuthStateChanged, signOut } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import Swal from 'sweetalert2';
+import { HoverColorHeaderDirective } from '../../directives/hover-color-header.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HoverColorHeaderDirective],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
@@ -30,11 +32,14 @@ export class HomeComponent implements OnInit {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         this.isLoggedIn = true;
-
+    
+        console.log('User UID:', user.uid); // Verificar el UID
+    
         // Revisar si el usuario es administrador
         const adminDocRef = doc(this.firestore, 'administradores', user.uid);
         const adminDoc = await getDoc(adminDocRef);
         if (adminDoc.exists()) {
+          console.log('Administrador encontrado:', adminDoc.data()); // Verificar si el documento del administrador existe
           this.isAdmin = true;
         } else {
           // Revisar si el usuario es especialista
@@ -48,6 +53,9 @@ export class HomeComponent implements OnInit {
             const pacienteDoc = await getDoc(pacienteDocRef);
             if (pacienteDoc.exists()) {
               this.isPaciente = true;
+            } else {
+              console.error('Usuario no encontrado en ninguna colección');
+              Swal.fire('Error', 'Usuario no encontrado', 'error');
             }
           }
         }
@@ -58,7 +66,7 @@ export class HomeComponent implements OnInit {
         this.isPaciente = false;
       }
     });
-  }
+  }    
 
   navigateTo(path: string): void {
     this.router.navigate([path]);

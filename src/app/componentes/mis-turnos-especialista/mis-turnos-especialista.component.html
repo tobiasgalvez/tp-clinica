@@ -4,11 +4,12 @@
 <form [formGroup]="filterForm" (ngSubmit)="filtrarTurnos()" class="form-filtro">
   <input formControlName="especialidad" placeholder="Filtrar por Especialidad" class="input-filtro">
   <input formControlName="paciente" placeholder="Filtrar por Paciente" class="input-filtro">
+  <input formControlName="busquedaGeneral" placeholder="Búsqueda General" class="input-filtro">
   <button type="submit" class="btn-filtrar">Filtrar</button>
 </form>
 
 <!-- Tabla de Turnos -->
-<table class="tabla-turnos" *ngIf="filteredTurnos.length > 0">
+<table class="tabla-turnos" *ngIf="filteredTurnos.length > 0" >
   <thead>
     <tr>
       <th>Paciente</th>
@@ -19,17 +20,17 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let turno of filteredTurnos">
-      <td>{{ turno.nombrePaciente }}</td>
+    <tr *ngFor="let turno of filteredTurnos" appHoverColor>
+      <td>{{ turno.nombrePaciente | capitalizar }}</td>
       <td>{{ turno.especialidad }}</td>
-      <td>{{ turno.fechaHora }}</td>
+      <td>{{ turno.fechaHora | formatoHorario}}</td>
       <td [ngClass]="turno.estado">{{ turno.estado }}</td>
       <td>
         <div class="acciones">
           <button *ngIf="turno.estado === 'pendiente'" (click)="aceptarTurno(turno.id)" class="btn-accion">Aceptar</button>
-          <button *ngIf="turno.estado === 'pendiente'" (click)="rechazarTurno(turno.id, 'Motivo de rechazo')" class="btn-accion">Rechazar</button>
-          <button *ngIf="turno.estado === 'Aceptado'" (click)="finalizarTurno(turno.id, 'Reseña de diagnóstico')" class="btn-accion">Finalizar</button>
-          <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno.id, 'Motivo de cancelación')" class="btn-accion">Cancelar</button>
+          <button *ngIf="turno.estado === 'pendiente'" (click)="rechazarTurno(turno.id)" class="btn-accion">Rechazar</button>
+          <button *ngIf="turno.estado === 'Aceptado'" (click)="finalizarTurno(turno)" class="btn-accion">Finalizar</button>
+          <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno.id)" class="btn-accion">Cancelar</button>
           <button *ngIf="turno.resenia" (click)="verResenia(turno.resenia)" class="btn-accion">Ver Reseña</button>
         </div>
       </td>
@@ -40,4 +41,102 @@
 <!-- Mensaje si no hay turnos -->
 <div *ngIf="filteredTurnos.length === 0" class="sin-turnos">
   <p>No hay turnos disponibles.</p>
+</div>
+
+<!-- Tabla de Pacientes Atendidos -->
+<h2 class="titulo-turnos">Pacientes Atendidos</h2>
+<table class="tabla-turnos" *ngIf="pacientesAtendidos.length > 0">
+  <thead>
+    <tr>
+      <th>Paciente</th>
+      <th>Historia Clínica</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let paciente of pacientesAtendidos">
+      <td>{{ paciente.nombre }}</td>
+      <td>
+        <div *ngIf="paciente.historiaClinica">
+          <p>Altura: {{ paciente.historiaClinica.altura }} cm</p>
+          <p>Peso: {{ paciente.historiaClinica.peso }} kg</p>
+          <p>Temperatura: {{ paciente.historiaClinica.temperatura }} °C</p>
+          <p>Presión: {{ paciente.historiaClinica.presion }}</p>
+          <div *ngFor="let dato of paciente.historiaClinica.datosDinamicos">
+            <p>{{ dato.clave }}: {{ dato.valor }}</p>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="acciones">
+          <button *ngIf="!paciente.historiaClinica" (click)="cargarHistoriaClinicaForm(paciente)" class="btn-accion">Cargar Historia Clínica</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Mensaje si no hay pacientes atendidos -->
+<div *ngIf="pacientesAtendidos.length === 0" class="sin-turnos">
+  <p>No hay pacientes atendidos.</p>
+</div>
+
+<!-- Formulario para cargar Historia Clínica -->
+<div *ngIf="historiaClinicaForm && pacienteSeleccionado" class="formulario-historia-clinica">
+  <h2 class="titulo-historia-clinica">Historia Clínica del Paciente: {{ pacienteSeleccionado.nombre }}</h2>
+  <form [formGroup]="historiaClinicaForm" (ngSubmit)="guardarHistoriaClinica()">
+    <div class="form-historia-clinica">
+      <div class="form-group">
+        <label for="altura">Altura (cm):</label>
+        <input id="altura" formControlName="altura" type="number" class="input-historia-clinica" required>
+      </div>
+
+      <div class="form-group">
+        <label for="peso">Peso (kg):</label>
+        <input id="peso" formControlName="peso" type="number" class="input-historia-clinica" required>
+      </div>
+
+      <div class="form-group">
+        <label for="temperatura">Temperatura (°C):</label>
+        <input id="temperatura" formControlName="temperatura" type="number" class="input-historia-clinica" required>
+      </div>
+
+      <div class="form-group">
+        <label for="presion">Presión:</label>
+        <input id="presion" formControlName="presion" type="text" class="input-historia-clinica" required>
+      </div>
+
+      <div class="form-group">
+        <label for="clave1">Clave 1:</label>
+        <input id="clave1" formControlName="clave1" type="text" class="input-historia-clinica">
+      </div>
+
+      <div class="form-group">
+        <label for="valor1">Valor 1:</label>
+        <input id="valor1" formControlName="valor1" type="text" class="input-historia-clinica">
+      </div>
+
+      <div class="form-group">
+        <label for="clave2">Clave 2 (opcional):</label>
+        <input id="clave2" formControlName="clave2" type="text" class="input-historia-clinica">
+      </div>
+
+      <div class="form-group">
+        <label for="valor2">Valor 2 (opcional):</label>
+        <input id="valor2" formControlName="valor2" type="text" class="input-historia-clinica">
+      </div>
+
+      <div class="form-group">
+        <label for="clave3">Clave 3 (opcional):</label>
+        <input id="clave3" formControlName="clave3" type="text" class="input-historia-clinica">
+      </div>
+
+      <div class="form-group">
+        <label for="valor3">Valor 3 (opcional):</label>
+        <input id="valor3" formControlName="valor3" type="text" class="input-historia-clinica">
+      </div>
+    </div>
+
+    <button type="submit" class="btn-guardar">Guardar Historia Clínica</button>
+  </form>
 </div>

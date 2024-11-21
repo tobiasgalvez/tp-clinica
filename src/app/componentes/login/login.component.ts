@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth, getAuth, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, collection, addDoc } from '@angular/fire/firestore';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import { CommonModule } from '@angular/common';
+import { RotateOnHoverDirective } from '../../directives/rotate-on-hover.directive';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RotateOnHoverDirective],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
     { nombre: 'Paciente 2', mail: 'paciente2@example.com', contrasena: 'password2' },
     { nombre: 'Paciente 3', mail: 'paciente3@example.com', contrasena: 'password3' },
     { nombre: 'Especialista 1', mail: 'gusgomez@yopmail.com', contrasena: '101010' },
-    { nombre: 'Especialista 2', mail: 'especialista2@example.com', contrasena: 'password5' },
+    { nombre: 'Especialista 2', mail: 'maudom@yopmail.com', contrasena: '101010' },
     { nombre: 'Admin', mail: 'admin2@admin2.com', contrasena: '101010' }
   ];
   isLoading: boolean = true;
@@ -62,6 +63,9 @@ export class LoginComponent implements OnInit {
         const adminDocRef = doc(this.firestore, 'administradores', user.uid);
         const adminDoc = await getDoc(adminDocRef);
 
+        // Registrar log de inicio de sesión
+        await this.registrarLogIngreso(user.uid);
+
         if (adminDoc.exists()) {
           this.router.navigate(['/home']);
         } else if (user.emailVerified) {
@@ -86,6 +90,30 @@ export class LoginComponent implements OnInit {
       }
     } else {
       this.errorMessage = 'Por favor complete todos los campos correctamente';
+    }
+  }
+
+  async registrarLogIngreso(uid: string) {
+    const fechaActual = new Date();
+    const fechaFormateada = fechaActual.toLocaleDateString('es-AR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+    const horaFormateada = fechaActual.toLocaleTimeString('es-AR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+
+    try {
+      await addDoc(collection(this.firestore, 'logs'), {
+        usuarioId: uid,
+        fecha: `${fechaFormateada} ${horaFormateada}`
+      });
+    } catch (error) {
+      console.error('Error al registrar el log de ingreso: ', error);
     }
   }
 

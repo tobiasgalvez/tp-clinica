@@ -34,6 +34,7 @@
   max-width: 1000px;
   margin: 0 auto;
   border-collapse: collapse;
+  background-color: white;
 
   th, td {
     border: 1px solid #ddd;
@@ -45,7 +46,7 @@
     background-color: #f2f2f2;
   }
 
-  .Pendiente {
+  .pendiente {
     color: orange;
   }
 
@@ -80,4 +81,57 @@
 .sin-turnos {
   text-align: center;
   margin-top: 20px;
+}
+
+
+
+
+
+
+
+.formulario-historia-clinica {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.titulo-historia-clinica {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-historia-clinica {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-guardar {
+  display: block;
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-guardar:hover {
+  background-color: #45a049;
 }

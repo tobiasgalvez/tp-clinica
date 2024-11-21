@@ -1,5 +1,5 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Firestore, setDoc, doc } from '@angular/fire/firestore';
+import { Firestore, setDoc, doc, addDoc, collection } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Auth, createUserWithEmailAndPassword, sendEmailVerification, signOut } from '@angular/fire/auth';
@@ -48,7 +48,7 @@ export class RegistroComponent implements OnInit {
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
-      edad: ['', [Validators.required, Validators.min(1), Validators.max(120)]],
+      edad: ['', [Validators.required, Validators.min(18), Validators.max(120)]],
       dni: ['', [Validators.required, Validators.pattern(/^[0-9]{7,8}$/)]],
       mail: ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.minLength(6)]],
@@ -136,6 +136,10 @@ export class RegistroComponent implements OnInit {
           await setDoc(doc(this.firestore, 'pacientes', userCredential.user.uid), dataToSave);
         } else {
           await setDoc(doc(this.firestore, 'especialistas', userCredential.user.uid), dataToSave);
+          // Guardar la segunda especialidad en la colección de especialidades si existe
+          if (datos.especialidad2) {
+            await addDoc(collection(this.firestore, 'especialidades'), { nombre: datos.especialidad2 });
+          }
         }
   
         Swal.fire({
@@ -180,6 +184,9 @@ export class RegistroComponent implements OnInit {
     if (result.isConfirmed && result.value) {
       this.agregarEspecialidad(result.value);
       this.registroForm.get('especialidad2')?.setValue(result.value);  // Asignar el valor a especialidad2
+
+      // Agregar la nueva especialidad a la colección de especialidades
+      await addDoc(collection(this.firestore, 'especialidades'), { nombre: result.value });
     }
   }
 

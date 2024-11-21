@@ -4,6 +4,7 @@
 <form [formGroup]="filterForm" (ngSubmit)="filtrarTurnos()" class="form-filtro">
   <input formControlName="especialidad" placeholder="Filtrar por Especialidad" class="input-filtro">
   <input formControlName="especialista" placeholder="Filtrar por Especialista" class="input-filtro">
+  <input formControlName="busquedaGeneral" placeholder="Búsqueda General" class="input-filtro">
   <button type="submit" class="btn-filtrar">Filtrar</button>
 </form>
 
@@ -19,13 +20,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let turno of filteredTurnos">
+    <tr *ngFor="let turno of filteredTurnos" appHoverColor>
       <td>{{ turno.especialidad }}</td>
       <td>{{ turno.nombreEspecialista }}</td>
       <td>{{ turno.fechaHora }}</td>
-      <td>{{ turno.estado }}</td>
+      <td>{{ turno.estado ?? 'Sin estado' | estado }}</td>
       <td>
-        <button *ngIf="turno.estado === 'Pendiente'" (click)="cancelarTurno(turno.id)" class="btn-cancelar">
+        <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno.id)" class="btn-cancelar">
           Cancelar Turno
         </button>
         <button *ngIf="turno.estado === 'Realizado' && turno.resenia" (click)="verResenia(turno.resenia)" class="btn-ver-resenia">

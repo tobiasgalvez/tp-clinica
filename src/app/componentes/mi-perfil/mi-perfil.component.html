@@ -1,8 +1,8 @@
 <div *ngIf="usuario" class="perfil-container">
   <h2>Mi Perfil</h2>
   <div class="perfil-info">
-    <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
-    <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+    <p><strong>Nombre:</strong> {{ usuario.nombre | capitalizar }}</p>
+    <p><strong>Apellido:</strong> {{ usuario.apellido | capitalizar }}</p>
     <p><strong>Email:</strong> {{ usuario.mail }}</p>
   </div>
 
@@ -15,6 +15,14 @@
   <!-- Disponibilidad Horaria para Especialistas -->
   <div *ngIf="usuario.tipo === 'especialista'" class="disponibilidad-container">
     <h3>Disponibilidad Horaria</h3>
+
+    <!-- Selección de Especialidad -->
+    <div class="especialidad-selector">
+      <h4>Especialidad</h4>
+      <select [(ngModel)]="especialidadSeleccionada">
+        <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
+      </select>
+    </div>
 
     <!-- Selección de Rango horario para Lunes a Viernes -->
     <div class="horario-rango">
@@ -39,7 +47,7 @@
       </div>
     </div>
 
-    <button (click)="actualizarDisponibilidadHoraria()" class="btn-update">Actualizar Horarios</button>
+    <button (click)="actualizarDisponibilidadHoraria()" class="btn-update" [appDisableButton]="usuario.tipo !== 'especialista'">Actualizar Horarios</button>
   </div>
 
   <!-- Botón para descargar la Historia Clínica -->

@@ -8,6 +8,7 @@ import { MisTurnosEspecialistaComponent } from './componentes/mis-turnos-especia
 import { SolicitarTurnoComponent } from './componentes/solicitar-turno/solicitar-turno.component';
 import { MiPerfilComponent } from './componentes/mi-perfil/mi-perfil.component';
 import { TurnosComponent } from './componentes/turnos/turnos.component';
+import { InformesAdministradorComponent } from './componentes/informes-administrador/informes-administrador.component';
 
 export const routes: Routes = [
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
     { path: 'solicitar-turno', component: SolicitarTurnoComponent},
     {path: 'mi-perfil', component: MiPerfilComponent},
     {path: 'turnos', component: TurnosComponent},
+    {path: 'informes-administrador', component:InformesAdministradorComponent}
 
 
 ];

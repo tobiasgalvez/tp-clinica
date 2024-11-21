@@ -1,0 +1,54 @@
+<div class="informes-container">
+    <h2>Informes de Administración</h2>
+  
+    <!-- Log de Ingresos -->
+    <div class="informe-item">
+      <h3>Log de Ingresos al Sistema</h3>
+      <canvas id="chartLogs"></canvas>
+      <div class="download-buttons">
+        <button (click)="descargarExcel(logIngresos, 'log_ingresos')">Descargar Excel</button>
+        <button (click)="descargarPDF(logIngresos, 'Log de Ingresos al Sistema')">Descargar PDF</button>
+      </div>
+    </div>
+  
+    <!-- Turnos por Especialidad -->
+    <div class="informe-item">
+      <h3>Turnos por Especialidad</h3>
+      <canvas id="chartTurnosPorEspecialidad"></canvas>
+      <div class="download-buttons">
+        <button (click)="descargarExcel(turnosEspecialidad, 'Turnos por Especialidad')">Descargar Excel</button>
+        <button (click)="descargarPDF(turnosEspecialidad, 'Turnos por Especialidad')">Descargar PDF</button>
+      </div>
+    </div>
+  
+    <!-- Turnos por Día -->
+    <div class="informe-item">
+      <h3>Turnos por Día</h3>
+      <canvas id="chartTurnosPorDia"></canvas>
+      <div class="download-buttons">
+        <button (click)="descargarExcel(turnosPorDia, 'Turnos por Día')">Descargar Excel</button>
+        <button (click)="descargarPDF(turnosPorDia, 'Turnos por Día')">Descargar PDF</button>
+      </div>
+    </div>
+  
+    <!-- Turnos Solicitados por Médico -->
+    <div class="informe-item">
+      <h3>Turnos Solicitados por Médico</h3>
+      <canvas id="chartTurnosPorMedicoSolicitados"></canvas>
+      <div class="download-buttons">
+        <button (click)="descargarExcel(turnosMedicoSolicitados, 'Turnos Solicitados por Médico')">Descargar Excel</button>
+        <button (click)="descargarPDF(turnosMedicoSolicitados, 'Turnos Solicitados por Médico')">Descargar PDF</button>
+      </div>
+    </div>
+  
+    <!-- Turnos Finalizados por Médico -->
+    <div class="informe-item">
+      <h3>Turnos Finalizados por Médico</h3>
+      <canvas id="chartTurnosPorMedicoFinalizados"></canvas>
+      <div class="download-buttons">
+        <button (click)="descargarExcel(turnosMedicoFinalizados, 'Turnos Finalizados por Médico')">Descargar Excel</button>
+        <button (click)="descargarPDF(turnosMedicoFinalizados, 'Turnos Finalizados por Médico')">Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+  

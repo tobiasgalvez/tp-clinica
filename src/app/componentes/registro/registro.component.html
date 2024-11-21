@@ -33,7 +33,7 @@
       <!-- Edad -->
       <input type="number" formControlName="edad" placeholder="Edad" required (blur)="registroForm.get('edad')?.markAsTouched()"/>
       <div class="error" *ngIf="registroForm.get('edad')?.touched && registroForm.get('edad')?.invalid">
-        <small>La edad debe ser entre 1 y 120 años</small>
+        <small>La edad debe ser entre 18 y 120 años</small>
       </div>
 
       <!-- DNI -->

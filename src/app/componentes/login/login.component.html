@@ -18,7 +18,7 @@
   <!-- Botones de acceso rápido -->
   <!-- Botones de acceso rápido -->
 <div class="fav-buttons-container">
-  <button *ngFor="let usuario of usuariosAccesoRapido" class="fav-button" (click)="loginConAccesoRapido(usuario)">
+  <button *ngFor="let usuario of usuariosAccesoRapido" class="fav-button" (click)="loginConAccesoRapido(usuario)" appRotateOnHover>
     <img *ngIf="usuario.imagenPerfil" [src]="usuario.imagenPerfil" alt="{{ usuario.nombre }}" />
     <span>{{ usuario.nombre }}</span>
   </button>
