@@ -4,21 +4,21 @@
       <h1>Clínica XYZ</h1>
     </div>
     <nav class="navbar__links">
-      <ul >
+      <ul>
         <!-- Accesos para todos los usuarios -->
         <li *ngIf="!isLoggedIn">
-          <a routerLink="/login" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/login')"  appHoverColorHeader>Login</a>
+          <a routerLink="/login" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/login')" appHoverColorHeader>Login</a>
         </li>
         <li *ngIf="!isLoggedIn">
           <a routerLink="/registro" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/registro')" appHoverColorHeader>Registro</a>
         </li>
         <li *ngIf="isLoggedIn">
-          <a routerLinkActive="active" class="navbar__link" (click)="cerrarSesion()" appHoverColorHeader>Cerrar Sesión</a>
+          <a routerLinkActive="active" class="navbar__link" (click)="cerrarSesion()" appHoverColorCerrarSesion>Cerrar Sesión</a>
         </li>
 
         <!-- Acceso exclusivo para Administradores -->
         <li *ngIf="isAdmin">
-          <a routerLink="/seccion-usuarios" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/seccion-usuarios')"  appHoverColorHeader>Usuarios</a>
+          <a routerLink="/seccion-usuarios" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/seccion-usuarios')" appHoverColorHeader>Usuarios</a>
         </li>
         <li *ngIf="isAdmin">
           <a routerLink="/turnos" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/turnos')" appHoverColorHeader>Turnos</a>
@@ -48,12 +48,29 @@
         <li *ngIf="isEspecialista">
           <a routerLink="/mi-perfil" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/mi-perfil')" appHoverColorHeader>Mi Perfil</a>
         </li>
+        
         <!-- Acceso a "Informes" para Administradores -->
         <li *ngIf="isAdmin">
           <a routerLink="/informes-administrador" routerLinkActive="active" class="navbar__link" (click)="navigateTo('/informes-administrador')" appHoverColorHeader>Informes</a>
         </li>
-
       </ul>
     </nav>
   </div>
 </header>
+
+<!-- Contenido Principal -->
+<div class="home-content">
+  <div *ngIf="!isLoggedIn" class="welcome-container">
+    <h2>Bienvenido a la Clínica XYZ!</h2>
+    <p>Para acceder a todas nuestras funcionalidades, por favor inicie sesión o registre una cuenta.</p>
+  </div>
+  
+  <div *ngIf="isLoggedIn" class="logged-in-container">
+    <h2>Bienvenido de nuevo a la Clínica XYZ!</h2>
+    <p>
+      Aquí podrás gestionar tus turnos, acceder a información sobre los profesionales de la salud, 
+      y realizar diversas acciones relacionadas con la clínica. 
+      Puedes seleccionar una especialidad y solicitar turnos en los horarios disponibles.
+    </p>
+  </div>
+</div>

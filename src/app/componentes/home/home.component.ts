@@ -5,11 +5,12 @@ import { Auth, getAuth, onAuthStateChanged, signOut } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import Swal from 'sweetalert2';
 import { HoverColorHeaderDirective } from '../../directives/hover-color-header.directive';
+import { HoverColorCerrarSesionDirective } from '../../directives/hover-color-cerrar-sesion.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HoverColorHeaderDirective],
+  imports: [CommonModule, HoverColorHeaderDirective, HoverColorCerrarSesionDirective],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
