@@ -58,7 +58,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let paciente of pacientesAtendidos">
-      <td>{{ paciente.nombre }}</td>
+      <td>{{ paciente.nombre | capitalizar }}</td>
       <td>
         <div *ngIf="paciente.historiaClinica">
           <p>Altura: {{ paciente.historiaClinica.altura }} cm</p>
