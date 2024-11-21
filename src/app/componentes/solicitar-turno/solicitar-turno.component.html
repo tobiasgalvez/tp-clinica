@@ -8,7 +8,7 @@
   <div class="pacientes-grid">
     <button *ngFor="let paciente of pacientes" class="paciente-button" (click)="seleccionarPaciente(paciente)">
       <img [src]="paciente.imagenPerfil || '../assets/default-user.png'" alt="Paciente {{ paciente.nombre }}" class="paciente-imagen">
-      <span class="span-paciente">{{ paciente.apellido }}, {{ paciente.nombre }}</span>
+      <span class="span-paciente">{{ paciente.apellido | capitalizar }}, {{ paciente.nombre | capitalizar }}</span>
     </button>
   </div>
 </div>

@@ -39,10 +39,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuario of usuarios">
+        <tr *ngFor="let usuario of usuarios" appHoverColor>
           <td>
-            <img *ngIf="usuario.imagenPerfil" [src]="usuario.imagenPerfil" alt="Imagen de perfil" width="50" height="50" />
+            <img [src]="usuario.imagenPerfil ? usuario.imagenPerfil : 'assets/default-user.png'" alt="Imagen de perfil" width="50" height="50" />
           </td>
+          
           <td>{{ usuario.nombre }}</td>
           <td>{{ usuario.apellido }}</td>
           <td>{{ usuario.edad }}</td>

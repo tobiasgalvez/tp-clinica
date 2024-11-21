@@ -5,6 +5,7 @@ import { Firestore, collection, getDocs, query, where, addDoc, doc, getDoc, upda
 import Swal from 'sweetalert2';
 import { FechaEspanolPipe } from '../../pipes/fecha-espanol.pipe';
 import { Router } from '@angular/router';
+import { CapitalizarPipe } from '../../pipes/capitalizar.pipe';
 
 interface Especialista {
   id: string;
@@ -18,7 +19,7 @@ interface Especialista {
 @Component({
   selector: 'app-solicitar-turno',
   standalone: true,
-  imports: [CommonModule, FechaEspanolPipe],
+  imports: [CommonModule, FechaEspanolPipe, CapitalizarPipe],
   templateUrl: './solicitar-turno.component.html',
   styleUrls: ['./solicitar-turno.component.scss']
 })
