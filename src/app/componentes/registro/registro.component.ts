@@ -124,23 +124,29 @@ export class RegistroComponent implements OnInit {
           imagenPerfilUrl = await getDownloadURL(storageRef);
         }
   
-        const dataToSave = {
+        const dataToSave: any = {
           ...datos,
           imagenes: fileUrls.length > 0 ? fileUrls : null,
           imagenPerfil: imagenPerfilUrl || null,
-          aprobado: this.tipoUsuario === 'Especialista' ? false : undefined // Solo para especialistas
         };
-  
+        
+        // Solo agrega el campo "aprobado" si el usuario es Especialista
+        if (this.tipoUsuario === 'Especialista') {
+          dataToSave.aprobado = false;
+        }
+        
         // Guardar datos en la colección adecuada
         if (this.tipoUsuario === 'Paciente') {
           await setDoc(doc(this.firestore, 'pacientes', userCredential.user.uid), dataToSave);
-        } else {
+        } else if (this.tipoUsuario === 'Especialista') {
           await setDoc(doc(this.firestore, 'especialistas', userCredential.user.uid), dataToSave);
+        
           // Guardar la segunda especialidad en la colección de especialidades si existe
           if (datos.especialidad2) {
             await addDoc(collection(this.firestore, 'especialidades'), { nombre: datos.especialidad2 });
           }
         }
+        
   
         Swal.fire({
           title: '¡Registro exitoso!',
@@ -152,7 +158,7 @@ export class RegistroComponent implements OnInit {
   
         await signOut(this.auth);
         setTimeout(() => {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/login']);
         }, 1000);
   
       } catch (error) {

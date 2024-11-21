@@ -180,13 +180,17 @@ export class MiPerfilComponent implements OnInit {
 
     return horarios;
   }
-
   descargarHistoriaClinicaPDF() {
     if (!this.historiaClinica || this.historiaClinica.length === 0) {
-      alert("No hay historia clínica para descargar");
-      return;
+        Swal.fire({
+            title: 'No disponible',
+            text: 'No hay historia clínica para descargar',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar',
+            backdrop: false
+        });
+        return;
     }
-
     const pdfDoc = new jsPDF();
     pdfDoc.setFontSize(18);
     pdfDoc.addImage('../assets/logo-clinica.png', 'PNG', 85, 10, 50, 20); // Agregar el logo de la clínica
